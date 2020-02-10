@@ -2,6 +2,8 @@ package org.vaadin.ext.bruno.items;
 
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
@@ -15,6 +17,10 @@ public class ItemsView extends Composite<VerticalLayout> {
     public static final String TITLE = "Items";
 
     public ItemsView() {
-        getContent().add(new Text("Content"));
+        Button addItemButton = new Button("Add Item");
+        addItemButton.addClickListener((e) -> {
+            UI.getCurrent().navigate(AddItemView.class);
+        });
+        getContent().add(addItemButton);
     }
 }
