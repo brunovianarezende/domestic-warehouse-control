@@ -1,11 +1,15 @@
 package org.vaadin.ext.bruno.backend;
 
 public class Item {
+
     private String name;
-    private int currentQuantity;
-    private int maxAmount;
-    private int warningThreshold;
-    private int mustBuyThreshold;
+
+    private Integer maxAmount;
+
+    private Integer warningThreshold;
+
+    private Integer mustBuyThreshold;
+
     private String notes;
 
     public String getName() {
@@ -16,35 +20,27 @@ public class Item {
         this.name = name;
     }
 
-    public int getCurrentQuantity() {
-        return currentQuantity;
-    }
-
-    public void setCurrentQuantity(int currentQuantity) {
-        this.currentQuantity = currentQuantity;
-    }
-
-    public int getMaxAmount() {
+    public Integer getMaxAmount() {
         return maxAmount;
     }
 
-    public void setMaxAmount(int maxAmount) {
+    public void setMaxAmount(Integer maxAmount) {
         this.maxAmount = maxAmount;
     }
 
-    public int getWarningThreshold() {
+    public Integer getWarningThreshold() {
         return warningThreshold;
     }
 
-    public void setWarningThreshold(int warningThreshold) {
+    public void setWarningThreshold(Integer warningThreshold) {
         this.warningThreshold = warningThreshold;
     }
 
-    public int getMustBuyThreshold() {
+    public Integer getMustBuyThreshold() {
         return mustBuyThreshold;
     }
 
-    public void setMustBuyThreshold(int mustBuyThreshold) {
+    public void setMustBuyThreshold(Integer mustBuyThreshold) {
         this.mustBuyThreshold = mustBuyThreshold;
     }
 
