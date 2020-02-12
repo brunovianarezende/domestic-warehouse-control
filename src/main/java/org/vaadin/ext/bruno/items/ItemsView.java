@@ -5,6 +5,7 @@ import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -46,6 +47,7 @@ public class ItemsView extends Composite<VerticalLayout> {
 
     private Grid<Item> createItemGrid() {
         Grid<Item> itemGrid = new Grid<>();
+        itemGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
         itemGrid.addColumn(Item::getName).setHeader("Name");
         itemGrid.addColumn(Item::getMaxAmount).setHeader("Max amount");
         itemGrid.addColumn(Item::getWarningThreshold).setHeader("Warning Threshold");
