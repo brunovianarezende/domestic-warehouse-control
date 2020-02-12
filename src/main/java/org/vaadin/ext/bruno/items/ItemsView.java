@@ -1,12 +1,19 @@
 package org.vaadin.ext.bruno.items;
 
+import java.util.function.Consumer;
+
+import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
@@ -32,7 +39,9 @@ public class ItemsView extends Composite<VerticalLayout> {
         });
         getContent().add(addItemButton);
 
-        Grid<Item> itemGrid = createItemGrid();
+        Grid<Item> itemGrid = createItemGrid(item -> {
+            UI.getCurrent().navigate(EditItemView.class, item.getId());
+        });
         DataProvider<Item, Void> provider = new CallbackDataProvider<>(q -> {
             // temp stub calls while I don't add proper paging support in service
             q.getLimit();
@@ -45,13 +54,20 @@ public class ItemsView extends Composite<VerticalLayout> {
         getContent().add(itemGrid);
     }
 
-    private Grid<Item> createItemGrid() {
+    private Grid<Item> createItemGrid(Consumer<Item> editEventListener) {
         Grid<Item> itemGrid = new Grid<>();
         itemGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
         itemGrid.addColumn(Item::getName).setHeader("Name");
         itemGrid.addColumn(Item::getMaxAmount).setHeader("Max amount");
         itemGrid.addColumn(Item::getWarningThreshold).setHeader("Warning Threshold");
         itemGrid.addColumn(Item::getMustBuyThreshold).setHeader("Must Buy Threshold");
+        itemGrid.addColumn(new ComponentRenderer<>(item -> {
+            Button button = new Button();
+            button.setIcon(new Icon(VaadinIcon.EDIT));
+            button.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+            button.addClickListener(e -> editEventListener.accept(item));
+            return button;
+        })).setFlexGrow(0);
         itemGrid.setItemDetailsRenderer(new ComponentRenderer<>(item -> {
             HorizontalLayout result = new HorizontalLayout();
             Label label = new Label("Notes:");
