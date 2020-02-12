@@ -20,6 +20,7 @@ import com.vaadin.flow.router.Route;
 import org.apache.commons.lang3.StringUtils;
 import org.vaadin.ext.bruno.MainLayout;
 import org.vaadin.ext.bruno.backend.Item;
+import org.vaadin.ext.bruno.backend.ItemService;
 
 @Route(value = "add-item", layout = MainLayout.class)
 @PageTitle(AddItemView.TITLE)
@@ -28,6 +29,8 @@ public class AddItemView extends Composite<VerticalLayout> {
     public static final String TITLE = "Add new Item";
 
     public AddItemView() {
+        ItemService service = ItemService.getInstance();
+
         getContent().add(new H3("New Item"));
         FormLayout form = new FormLayout();
         getContent().add(form);
@@ -69,7 +72,7 @@ public class AddItemView extends Composite<VerticalLayout> {
 
         IntegerField mustByThreshold = new IntegerField();
         mustByThreshold.setTitle(
-                "Show a critical warning when the number of items we have is equal or less than this value. Leave empty null for no warning.");
+                "Show a critical warning when the number of items we have is equal or less than this value. Leave empty for no warning.");
         mustByThreshold.setStep(1);
         mustByThreshold.setHasControls(true);
         mustByThreshold.setMin(0);
@@ -84,7 +87,6 @@ public class AddItemView extends Composite<VerticalLayout> {
 
         HorizontalLayout buttons = new HorizontalLayout();
         getContent().add(buttons);
-        Notification bla = new Notification();
         Button save = new Button("Save");
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         save.addClickListener((e) -> {
@@ -92,6 +94,7 @@ public class AddItemView extends Composite<VerticalLayout> {
             try {
                 binder.writeBean(newItem);
                 Notification.show("New Item Saved", 1000, Notification.Position.MIDDLE);
+                service.addItem(newItem);
                 goBack();
             } catch (ValidationException ex) {
             }
