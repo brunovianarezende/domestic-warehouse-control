@@ -11,6 +11,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import org.vaadin.ext.bruno.backend.ShoppingList;
+import org.vaadin.ext.bruno.backend.ShoppingListService;
 import org.vaadin.ext.bruno.frontend.MainLayout;
 import org.vaadin.ext.bruno.backend.Item;
 import org.vaadin.ext.bruno.backend.ItemService;
@@ -20,13 +22,13 @@ import org.vaadin.ext.bruno.frontend.items.ItemForm;
 @PageTitle(AddShoppingListView.TITLE)
 public class AddShoppingListView extends Composite<VerticalLayout> {
 
-    public static final String TITLE = "Add new Item";
+    public static final String TITLE = "Add new Shopping List";
 
     public AddShoppingListView() {
-        ItemService service = ItemService.getInstance();
+        ShoppingListService service = ShoppingListService.getInstance();
 
-        getContent().add(new H3("New Item"));
-        ItemForm form = new ItemForm();
+        getContent().add(new H3("New List"));
+        ShoppingListForm form = new ShoppingListForm();
         getContent().add(form);
 
         HorizontalLayout buttons = new HorizontalLayout();
@@ -34,11 +36,11 @@ public class AddShoppingListView extends Composite<VerticalLayout> {
         Button save = new Button("Save");
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         save.addClickListener((e) -> {
-            Item newItem = new Item();
+            ShoppingList newList = new ShoppingList();
             try {
-                form.getBinder().writeBean(newItem);
-                Notification.show("New Item Saved", 1000, Notification.Position.MIDDLE);
-                service.addItem(newItem);
+                form.getBinder().writeBean(newList);
+                Notification.show("New List Saved", 1000, Notification.Position.MIDDLE);
+                service.addShoppingList(newList);
                 goBack();
             } catch (ValidationException ignored) {
             }

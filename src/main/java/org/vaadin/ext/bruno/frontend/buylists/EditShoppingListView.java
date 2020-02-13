@@ -16,26 +16,25 @@ import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import org.vaadin.ext.bruno.backend.ShoppingList;
+import org.vaadin.ext.bruno.backend.ShoppingListService;
 import org.vaadin.ext.bruno.frontend.MainLayout;
-import org.vaadin.ext.bruno.backend.Item;
-import org.vaadin.ext.bruno.backend.ItemService;
-import org.vaadin.ext.bruno.frontend.items.ItemForm;
 
 @Route(value = "edit-shopping-list", layout = MainLayout.class)
 @PageTitle(EditShoppingListView.TITLE)
 public class EditShoppingListView extends Composite<VerticalLayout> implements HasUrlParameter<String> {
 
-    public static final String TITLE = "Edit Item";
+    public static final String TITLE = "Edit Shopping List";
 
-    private final ItemForm form = new ItemForm();
+    private final ShoppingListForm form = new ShoppingListForm();
 
-    private Item item = null;
+    private ShoppingList shoppingList = null;
 
-    private ItemService service;
+    private ShoppingListService service;
 
     public EditShoppingListView() {
-        service = ItemService.getInstance();
-        getContent().add(new H3("Edit Item"));
+        service = ShoppingListService.getInstance();
+        getContent().add(new H3("Edit Shopping List"));
 
         getContent().add(form);
 
@@ -44,10 +43,10 @@ public class EditShoppingListView extends Composite<VerticalLayout> implements H
         Button save = new Button("Save");
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         save.addClickListener((e) -> {
-            if (item != null) {
+            if (shoppingList != null) {
                 try {
-                    form.getBinder().writeBean(item);
-                    service.saveItem(item);
+                    form.getBinder().writeBean(shoppingList);
+                    service.saveShoppingList(shoppingList);
                 } catch (ValidationException ignored) {
                     return;
                 }
@@ -70,13 +69,13 @@ public class EditShoppingListView extends Composite<VerticalLayout> implements H
 
     @Override
     public void setParameter(BeforeEvent beforeEvent, String itemId) {
-        Optional<Item> optionalItem = service.getItem(itemId);
-        if (optionalItem.isPresent()) {
-            this.item = optionalItem.get();
-            form.getBinder().readBean(this.item);
+        Optional<ShoppingList> optionalShoppingList = service.getShoppingList(itemId);
+        if (optionalShoppingList.isPresent()) {
+            this.shoppingList = optionalShoppingList.get();
+            form.getBinder().readBean(this.shoppingList);
         } else {
             Notification notification = new Notification();
-            notification.setText("Item not found");
+            notification.setText("Shopping List not found");
             notification.setDuration(2000);
             notification.setPosition(Notification.Position.MIDDLE);
             notification.addThemeVariants(NotificationVariant.LUMO_ERROR);

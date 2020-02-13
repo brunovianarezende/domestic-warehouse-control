@@ -7,8 +7,11 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationResult;
+import com.vaadin.flow.data.binder.Validator;
+import com.vaadin.flow.data.validator.RegexpValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.vaadin.ext.bruno.backend.Item;
+import org.vaadin.ext.bruno.frontend.NotBlankValidator;
 
 public class ItemForm extends Composite<FormLayout> {
     private Binder<Item> binder = new Binder<>();
@@ -23,14 +26,7 @@ public class ItemForm extends Composite<FormLayout> {
         //        name.setRequiredIndicatorVisible(true);
         form.addFormItem(name, "Name");
         binder.forField(name)
-                .withValidator((b, v) ->  {
-                    if (StringUtils.isBlank(b)) {
-                        return ValidationResult.error("Name must not be empty");
-                    }
-                    else {
-                        return ValidationResult.ok();
-                    }
-                })
+                .withValidator(new NotBlankValidator("Name must not be empty"))
                 .bind(Item::getName, Item::setName);
 
         IntegerField maxAmount = new IntegerField();
