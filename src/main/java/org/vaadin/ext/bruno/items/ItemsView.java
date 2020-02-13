@@ -11,9 +11,11 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
@@ -33,11 +35,18 @@ public class ItemsView extends Composite<VerticalLayout> {
 
     public ItemsView() {
         ItemService service = ItemService.getInstance();
-        Button addItemButton = new Button("Add Item");
+
+        HorizontalLayout gridHeader = new HorizontalLayout();
+        H3 title = new H3("Items");
+        title.getStyle().set("margin-top", "0px");
+        gridHeader.add(title);
+        Button addItemButton = new Button("Add");
         addItemButton.addClickListener((e) -> {
             UI.getCurrent().navigate(AddItemView.class);
         });
-        getContent().add(addItemButton);
+        gridHeader.add(addItemButton);
+        gridHeader.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.END);
+        getContent().add(gridHeader);
 
         Grid<Item> itemGrid = createItemGrid(item -> {
             UI.getCurrent().navigate(EditItemView.class, item.getId());
