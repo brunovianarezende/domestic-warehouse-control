@@ -1,4 +1,4 @@
-package org.vaadin.ext.bruno.buylists;
+package org.vaadin.ext.bruno.frontend.items;
 
 import java.util.Optional;
 
@@ -16,14 +16,13 @@ import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import org.vaadin.ext.bruno.MainLayout;
+import org.vaadin.ext.bruno.frontend.MainLayout;
 import org.vaadin.ext.bruno.backend.Item;
 import org.vaadin.ext.bruno.backend.ItemService;
-import org.vaadin.ext.bruno.items.ItemForm;
 
-@Route(value = "edit-shopping-list", layout = MainLayout.class)
-@PageTitle(EditShoppingListView.TITLE)
-public class EditShoppingListView extends Composite<VerticalLayout> implements HasUrlParameter<String> {
+@Route(value = "edit-item", layout = MainLayout.class)
+@PageTitle(EditItemView.TITLE)
+public class EditItemView extends Composite<VerticalLayout> implements HasUrlParameter<String> {
 
     public static final String TITLE = "Edit Item";
 
@@ -33,7 +32,7 @@ public class EditShoppingListView extends Composite<VerticalLayout> implements H
 
     private ItemService service;
 
-    public EditShoppingListView() {
+    public EditItemView() {
         service = ItemService.getInstance();
         getContent().add(new H3("Edit Item"));
 

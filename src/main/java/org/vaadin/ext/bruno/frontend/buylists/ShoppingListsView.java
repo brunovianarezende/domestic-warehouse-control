@@ -1,4 +1,4 @@
-package org.vaadin.ext.bruno.buylists;
+package org.vaadin.ext.bruno.frontend.buylists;
 
 import java.util.function.Consumer;
 
@@ -20,7 +20,7 @@ import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.Route;
-import org.vaadin.ext.bruno.MainLayout;
+import org.vaadin.ext.bruno.frontend.MainLayout;
 import org.vaadin.ext.bruno.backend.ShoppingList;
 import org.vaadin.ext.bruno.backend.ShoppingListService;
 

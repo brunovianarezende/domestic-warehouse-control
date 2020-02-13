@@ -1,4 +1,4 @@
-package org.vaadin.ext.bruno.buylists;
+package org.vaadin.ext.bruno.frontend.buylists;
 
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.UI;
@@ -11,10 +11,10 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import org.vaadin.ext.bruno.MainLayout;
+import org.vaadin.ext.bruno.frontend.MainLayout;
 import org.vaadin.ext.bruno.backend.Item;
 import org.vaadin.ext.bruno.backend.ItemService;
-import org.vaadin.ext.bruno.items.ItemForm;
+import org.vaadin.ext.bruno.frontend.items.ItemForm;
 
 @Route(value = "add-shopping-list", layout = MainLayout.class)
 @PageTitle(AddShoppingListView.TITLE)

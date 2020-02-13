@@ -1,9 +1,7 @@
-package org.vaadin.ext.bruno.items;
+package org.vaadin.ext.bruno.frontend.items;
 
 import java.util.function.Consumer;
 
-import com.vaadin.flow.component.ClickEvent;
-import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
@@ -23,7 +21,7 @@ import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import org.vaadin.ext.bruno.MainLayout;
+import org.vaadin.ext.bruno.frontend.MainLayout;
 import org.vaadin.ext.bruno.backend.Item;
 import org.vaadin.ext.bruno.backend.ItemService;
 

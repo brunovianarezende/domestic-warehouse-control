@@ -1,4 +1,4 @@
-package org.vaadin.ext.bruno;
+package org.vaadin.ext.bruno.frontend;
 
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -7,8 +7,8 @@ import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
-import org.vaadin.ext.bruno.buylists.ShoppingListsView;
-import org.vaadin.ext.bruno.items.ItemsView;
+import org.vaadin.ext.bruno.frontend.buylists.ShoppingListsView;
+import org.vaadin.ext.bruno.frontend.items.ItemsView;
 
 @PWA(name = "Domestic Warehouse Control", shortName = "DWC")
 @CssImport("./styles/shared-styles.css")

@@ -1,4 +1,4 @@
-package org.vaadin.ext.bruno.items;
+package org.vaadin.ext.bruno.frontend.buylists;
 
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -10,10 +10,10 @@ import com.vaadin.flow.data.binder.ValidationResult;
 import org.apache.commons.lang3.StringUtils;
 import org.vaadin.ext.bruno.backend.Item;
 
-public class ItemForm extends Composite<FormLayout> {
+public class ShoppingListForm extends Composite<FormLayout> {
     private Binder<Item> binder = new Binder<>();
 
-    public ItemForm() {
+    public ShoppingListForm() {
         binder = new Binder<>();
         FormLayout form = getContent();
 
@@ -21,11 +21,11 @@ public class ItemForm extends Composite<FormLayout> {
         name.setRequired(true);
         // TODO: add a required class to name label, given setRequiredIndicatorVisible has no effect in a form item
         //        name.setRequiredIndicatorVisible(true);
-        form.addFormItem(name, "Name");
+        form.addFormItem(name, "Identifier");
         binder.forField(name)
                 .withValidator((b, v) ->  {
                     if (StringUtils.isBlank(b)) {
-                        return ValidationResult.error("Name must not be empty");
+                        return ValidationResult.error("Identifier must not be empty");
                     }
                     else {
                         return ValidationResult.ok();

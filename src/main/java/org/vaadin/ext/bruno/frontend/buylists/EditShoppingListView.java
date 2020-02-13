@@ -1,4 +1,4 @@
-package org.vaadin.ext.bruno.items;
+package org.vaadin.ext.bruno.frontend.buylists;
 
 import java.util.Optional;
 
@@ -6,31 +6,24 @@ import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.IntegerField;
-import com.vaadin.flow.component.textfield.TextArea;
-import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
-import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import org.apache.commons.lang3.StringUtils;
-import org.vaadin.ext.bruno.MainLayout;
+import org.vaadin.ext.bruno.frontend.MainLayout;
 import org.vaadin.ext.bruno.backend.Item;
 import org.vaadin.ext.bruno.backend.ItemService;
+import org.vaadin.ext.bruno.frontend.items.ItemForm;
 
-@Route(value = "edit-item", layout = MainLayout.class)
-@PageTitle(EditItemView.TITLE)
-public class EditItemView extends Composite<VerticalLayout> implements HasUrlParameter<String> {
+@Route(value = "edit-shopping-list", layout = MainLayout.class)
+@PageTitle(EditShoppingListView.TITLE)
+public class EditShoppingListView extends Composite<VerticalLayout> implements HasUrlParameter<String> {
 
     public static final String TITLE = "Edit Item";
 
@@ -40,7 +33,7 @@ public class EditItemView extends Composite<VerticalLayout> implements HasUrlPar
 
     private ItemService service;
 
-    public EditItemView() {
+    public EditShoppingListView() {
         service = ItemService.getInstance();
         getContent().add(new H3("Edit Item"));
 
