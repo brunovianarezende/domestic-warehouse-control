@@ -7,7 +7,7 @@ import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
-import org.vaadin.ext.bruno.buylists.BuyListsView;
+import org.vaadin.ext.bruno.buylists.ShoppingListsView;
 import org.vaadin.ext.bruno.items.ItemsView;
 
 @PWA(name = "Domestic Warehouse Control", shortName = "DWC")
@@ -20,7 +20,7 @@ public class MainLayout extends AppLayout {
         VerticalLayout menuBar = new VerticalLayout();
         menuBar.setId("menuBar");
         menuBar.add(new RouterLink(ItemsView.TITLE, ItemsView.class));
-        menuBar.add(new RouterLink(BuyListsView.TITLE, BuyListsView.class));
+        menuBar.add(new RouterLink(ShoppingListsView.TITLE, ShoppingListsView.class));
         addToDrawer(menuBar);
     }
 }

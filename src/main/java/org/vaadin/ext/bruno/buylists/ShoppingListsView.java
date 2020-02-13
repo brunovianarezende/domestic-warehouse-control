@@ -6,11 +6,11 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import org.vaadin.ext.bruno.MainLayout;
 
-@Route(value = "buylists", layout = MainLayout.class)
-public class BuyListsView extends Composite<VerticalLayout> {
-    public static final String TITLE = "Buy Lists";
+@Route(value = "shopping-lists", layout = MainLayout.class)
+public class ShoppingListsView extends Composite<VerticalLayout> {
+    public static final String TITLE = "Shopping Lists";
 
-    public BuyListsView() {
-        getContent().add(new Text("Buy lists"));
+    public ShoppingListsView() {
+        getContent().add(new Text("Shopping lists"));
     }
 }
