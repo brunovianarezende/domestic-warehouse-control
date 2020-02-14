@@ -63,11 +63,11 @@ public class ShoppingListsView extends Composite<VerticalLayout> {
         shoppingListGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
         shoppingListGrid.addColumn(ShoppingList::getIdentifier).setHeader("Identifier");
         shoppingListGrid.addColumn(new ComponentRenderer<>(shoppingList -> {
-            Button button = new Button();
-            button.setIcon(new Icon(VaadinIcon.EDIT));
-            button.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-            button.addClickListener(e -> editEventListener.accept(shoppingList));
-            return button;
+            Button editButton = new Button();
+            editButton.setIcon(new Icon(VaadinIcon.EDIT));
+            editButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+            editButton.addClickListener(e -> editEventListener.accept(shoppingList));
+            return editButton;
         })).setFlexGrow(0);
         shoppingListGrid.setItemDetailsRenderer(new ComponentRenderer<>(shoppingList -> {
             HorizontalLayout result = new HorizontalLayout();
