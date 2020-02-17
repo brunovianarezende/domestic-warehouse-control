@@ -15,7 +15,6 @@ public class ShoppingListForm extends Composite<FormLayout> {
 
     public ShoppingListForm() {
         ItemService itemService = ItemService.getInstance();
-        binder = new Binder<>();
         FormLayout form = getContent();
 
         TextField identifier = new TextField();
@@ -33,6 +32,8 @@ public class ShoppingListForm extends Composite<FormLayout> {
 
         ItemsToBuyField itemsToBuyField = new ItemsToBuyField("Items to Buy", itemService.getItems());
         form.add(itemsToBuyField);
+        binder.forField(itemsToBuyField)
+            .bind(ShoppingList::getItemsToBuy, ShoppingList::setItemsToBuy);
     }
 
     public Binder<ShoppingList> getBinder() {

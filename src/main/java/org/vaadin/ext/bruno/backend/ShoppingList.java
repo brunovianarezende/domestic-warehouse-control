@@ -1,6 +1,7 @@
 package org.vaadin.ext.bruno.backend;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class ShoppingList {
@@ -8,7 +9,7 @@ public class ShoppingList {
 
     private String identifier;
 
-    private List<ItemToBuy> itemsToBuy = new ArrayList<>();
+    private Collection<ItemToBuy> itemsToBuy = new ArrayList<>();
 
     private String notes = "";
 
@@ -28,11 +29,11 @@ public class ShoppingList {
         this.identifier = identifier;
     }
 
-    public List<ItemToBuy> getItemsToBuy() {
+    public Collection<ItemToBuy> getItemsToBuy() {
         return itemsToBuy;
     }
 
-    public void setItemsToBuy(List<ItemToBuy> itemsToBuy) {
+    public void setItemsToBuy(Collection<ItemToBuy> itemsToBuy) {
         this.itemsToBuy = itemsToBuy;
     }
 
