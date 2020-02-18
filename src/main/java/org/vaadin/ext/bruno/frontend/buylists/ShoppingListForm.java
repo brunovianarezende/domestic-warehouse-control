@@ -30,8 +30,9 @@ public class ShoppingListForm extends Composite<FormLayout> {
         form.addFormItem(notes, "Notes");
         binder.bind(notes, ShoppingList::getNotes, ShoppingList::setNotes);
 
-        ItemsToBuyField itemsToBuyField = new ItemsToBuyField("Items to Buy", itemService.getItems());
+        ItemsToBuyField itemsToBuyField = new ItemsToBuyField(itemService.getItems());
         form.add(itemsToBuyField);
+        form.setColspan(itemsToBuyField, 2);
         binder.forField(itemsToBuyField)
             .bind(ShoppingList::getItemsToBuy, ShoppingList::setItemsToBuy);
     }

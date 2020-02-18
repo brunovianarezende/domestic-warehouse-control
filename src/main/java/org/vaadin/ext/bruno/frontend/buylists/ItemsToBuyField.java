@@ -5,33 +5,45 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import com.vaadin.flow.component.AbstractCompositeField;
+import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.dnd.GridDropMode;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import org.vaadin.ext.bruno.backend.Item;
 import org.vaadin.ext.bruno.backend.ItemToBuy;
 
-public class ItemsToBuyField extends AbstractCompositeField<HorizontalLayout, ItemsToBuyField, Collection<ItemToBuy>> {
+public class ItemsToBuyField extends AbstractCompositeField<FormLayout, ItemsToBuyField, Collection<ItemToBuy>> {
 
     private final LinkedHashMap<String, ItemToBuy> currentItems = new LinkedHashMap<>();
 
-    public ItemsToBuyField(String label, List<Item> availableItems) {
+    public ItemsToBuyField(List<Item> availableItems) {
         super(Collections.emptyList());
-        //        getContent().add(new Label(label));
 
-        HorizontalLayout grids = getContent();
-        grids.setAlignItems(FlexComponent.Alignment.STRETCH);
+        FormLayout grids = getContent();
 
-        Grid<ItemToBuy> itemsToBuyGrid = new Grid<>(ItemToBuy.class);
+        Grid<ItemToBuy> itemsToBuyGrid = new Grid<>();
+        itemsToBuyGrid.addColumn(i -> i.getItem().getName()).setHeader("Item");
+        itemsToBuyGrid.addColumn(ItemToBuy::getNumberOfItems).setHeader("Number of items to buy");
+        itemsToBuyGrid.setItemDetailsRenderer(new ComponentRenderer<>(itemToBuy -> {
+            HorizontalLayout result = new HorizontalLayout();
+            Label label = new Label("Notes:");
+            label.getStyle().set("font-weight", "bold");
+            label.getStyle().set("margin-right", "5px");
+            result.add(label);
+            String notes = itemToBuy.getNotes();
+            result.add(new Text(notes == null ? "" : notes));
+            return result;
+        }));
         itemsToBuyGrid.setItems(currentItems.values());
+        itemsToBuyGrid.setWidth("100px");
         grids.add(itemsToBuyGrid);
 
         CallbackDataProvider.FetchCallback<Item, Collection<String>> itemCollectionFetchCallback = q -> availableItems
@@ -44,9 +56,14 @@ public class ItemsToBuyField extends AbstractCompositeField<HorizontalLayout, It
                 .withConfigurableFilter();
         configurableAvailableItemsDP.setFilter(currentItems.keySet());
 
-        Grid<Item> availableItemsGrid = new Grid<>(Item.class);
+        Grid<Item> availableItemsGrid = new Grid<>();
+        availableItemsGrid.addColumn(Item::getName).setHeader("Name");
+        availableItemsGrid.addColumn(i -> 0).setHeader("We have");
+        availableItemsGrid.addColumn(this::createShouldHaveColum).setHeader("We should have");
+
         availableItemsGrid.setDataProvider(configurableAvailableItemsDP);
         availableItemsGrid.setRowsDraggable(true);
+        availableItemsGrid.setWidth("100px");
         grids.add(availableItemsGrid);
 
         List<Item> draggedItems = new ArrayList<>();
@@ -78,10 +95,25 @@ public class ItemsToBuyField extends AbstractCompositeField<HorizontalLayout, It
         });
     }
 
+    private String createShouldHaveColum(Item item) {
+         Integer warningThreshold = item.getWarningThreshold();
+         Integer maxAmount = item.getMaxAmount();
+         if (warningThreshold == null) {
+             return "-";
+         }
+         else if (maxAmount == null) {
+             return String.valueOf(warningThreshold + 1);
+         }
+         else {
+             return String.format("%s - %s", warningThreshold+1, maxAmount);
+         }
+    }
+
     @Override
-    protected void setPresentationValue(Collection<ItemToBuy> itemToBuys) {
+    protected void setPresentationValue(Collection<ItemToBuy> itemsToBuy) {
         currentItems.clear();
-        currentItems
-                .putAll(itemToBuys.stream().collect(Collectors.toMap(i -> i.getItem().getId(), Function.identity())));
+        for (ItemToBuy itemToBuy: itemsToBuy) {
+            currentItems.put(itemToBuy.getItem().getId(), itemToBuy);
+        }
     }
 }
