@@ -5,6 +5,8 @@ public class Item {
 
     private String name;
 
+    private int currentAmount;
+
     private Integer maxAmount;
 
     private Integer warningThreshold;
@@ -27,6 +29,14 @@ public class Item {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getCurrentAmount() {
+        return currentAmount;
+    }
+
+    public void setCurrentAmount(int currentAmount) {
+        this.currentAmount = currentAmount;
     }
 
     public Integer getMaxAmount() {

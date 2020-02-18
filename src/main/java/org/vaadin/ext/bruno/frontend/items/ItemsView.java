@@ -65,8 +65,9 @@ public class ItemsView extends Composite<VerticalLayout> {
         Grid<Item> itemGrid = new Grid<>();
         itemGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
         itemGrid.addColumn(Item::getName).setHeader("Name");
-        itemGrid.addColumn(Item::getMaxAmount).setHeader("Max amount");
+        itemGrid.addColumn(Item::getCurrentAmount).setHeader("Current amount");
         itemGrid.addColumn(Item::getWarningThreshold).setHeader("Warning Threshold");
+        itemGrid.addColumn(Item::getMaxAmount).setHeader("Max amount");
         itemGrid.addColumn(Item::getMustBuyThreshold).setHeader("Must Buy Threshold");
         itemGrid.addColumn(new ComponentRenderer<>(item -> {
             Button button = new Button();

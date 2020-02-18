@@ -6,15 +6,11 @@ import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.binder.ValidationResult;
-import com.vaadin.flow.data.binder.Validator;
-import com.vaadin.flow.data.validator.RegexpValidator;
-import org.apache.commons.lang3.StringUtils;
 import org.vaadin.ext.bruno.backend.Item;
 import org.vaadin.ext.bruno.frontend.NotBlankValidator;
 
 public class ItemForm extends Composite<FormLayout> {
-    private Binder<Item> binder = new Binder<>();
+    private Binder<Item> binder;
 
     public ItemForm() {
         binder = new Binder<>();
@@ -28,6 +24,17 @@ public class ItemForm extends Composite<FormLayout> {
         binder.forField(name)
                 .withValidator(new NotBlankValidator("Name must not be empty"))
                 .bind(Item::getName, Item::setName);
+
+        IntegerField currentAmount = new IntegerField();
+        currentAmount.setTitle("How many such items we currently have");
+        currentAmount.setStep(1);
+        currentAmount.setHasControls(true);
+        currentAmount.setMin(0);
+        currentAmount.setValue(0);
+        form.addFormItem(currentAmount, "Current amount");
+        binder.forField(currentAmount)
+                .asRequired()
+                .bind(Item::getCurrentAmount, Item::setCurrentAmount);
 
         IntegerField maxAmount = new IntegerField();
         maxAmount.setTitle("The maximum number of such items.");

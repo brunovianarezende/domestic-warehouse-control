@@ -58,7 +58,7 @@ public class ItemsToBuyField extends AbstractCompositeField<FormLayout, ItemsToB
 
         Grid<Item> availableItemsGrid = new Grid<>();
         availableItemsGrid.addColumn(Item::getName).setHeader("Name");
-        availableItemsGrid.addColumn(i -> 0).setHeader("We have");
+        availableItemsGrid.addColumn(Item::getCurrentAmount).setHeader("We have");
         availableItemsGrid.addColumn(this::createShouldHaveColum).setHeader("We should have");
 
         availableItemsGrid.setDataProvider(configurableAvailableItemsDP);
@@ -83,9 +83,8 @@ public class ItemsToBuyField extends AbstractCompositeField<FormLayout, ItemsToB
             ItemToBuy newItem = new ItemToBuy();
             Item theItem = draggedItems.get(0);
             newItem.setItem(theItem);
-            Integer warningThreshold = theItem.getWarningThreshold();
-            warningThreshold = warningThreshold == null ? 0 : warningThreshold;
-            newItem.setNumberOfItems(warningThreshold + 1);
+
+            newItem.setNumberOfItems(getSuggestionForNumberOfItems(theItem));
             currentItems.put(newItem.getItem().getId(), newItem);
             setModelValue(new ArrayList<>(currentItems.values()), true);
             draggedItems.clear();
@@ -93,6 +92,21 @@ public class ItemsToBuyField extends AbstractCompositeField<FormLayout, ItemsToB
             itemsToBuyGrid.setItems(currentItems.values());
             configurableAvailableItemsDP.setFilter(currentItems.keySet());
         });
+    }
+
+    private int getSuggestionForNumberOfItems(Item theItem) {
+        if (theItem.getWarningThreshold() != null) {
+            int weShouldHave = theItem.getWarningThreshold() + 1;
+            int weHave = theItem.getCurrentAmount();
+            if (weShouldHave > weHave) {
+                return weShouldHave - weHave;
+            }
+            else {
+                return 1;
+            }
+        }
+
+        return 1;
     }
 
     private String createShouldHaveColum(Item item) {
