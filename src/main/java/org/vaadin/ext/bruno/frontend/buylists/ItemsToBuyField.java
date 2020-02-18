@@ -7,13 +7,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import com.vaadin.flow.component.AbstractCompositeField;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.dnd.GridDropMode;
-import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
@@ -45,14 +43,12 @@ public class ItemsToBuyField extends AbstractCompositeField<FormLayout, ItemsToB
             return numItems;
         })).setHeader("Number of items to buy");
         itemsToBuyGrid.setItemDetailsRenderer(new ComponentRenderer<>(itemToBuy -> {
-            HorizontalLayout result = new HorizontalLayout();
-            Label label = new Label("Notes:");
-            label.getStyle().set("font-weight", "bold");
-            label.getStyle().set("margin-right", "5px");
-            result.add(label);
-            String notes = itemToBuy.getNotes();
-            result.add(new Text(notes == null ? "" : notes));
-            return result;
+            TextArea notesField = new TextArea();
+            notesField.setValue(itemToBuy.getNotes() == null ? "": itemToBuy.getNotes());
+            notesField.setLabel("Notes");
+            notesField.setWidthFull();
+            notesField.addValueChangeListener(e -> itemToBuy.setNotes(e.getValue()));
+            return notesField;
         }));
         itemsToBuyGrid.setItems(currentItems.values());
         itemsToBuyGrid.setWidth("100px");
