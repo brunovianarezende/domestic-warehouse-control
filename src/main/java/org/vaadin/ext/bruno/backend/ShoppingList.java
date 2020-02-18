@@ -2,7 +2,6 @@ package org.vaadin.ext.bruno.backend;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 public class ShoppingList {
     private String id;

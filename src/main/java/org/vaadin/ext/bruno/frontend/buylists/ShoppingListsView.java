@@ -14,6 +14,7 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
@@ -63,11 +64,18 @@ public class ShoppingListsView extends Composite<VerticalLayout> {
         shoppingListGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
         shoppingListGrid.addColumn(ShoppingList::getIdentifier).setHeader("Identifier");
         shoppingListGrid.addColumn(new ComponentRenderer<>(shoppingList -> {
+            FlexLayout buttons = new FlexLayout();
             Button editButton = new Button();
             editButton.setIcon(new Icon(VaadinIcon.EDIT));
             editButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
             editButton.addClickListener(e -> editEventListener.accept(shoppingList));
-            return editButton;
+            buttons.add(editButton);
+            Button delButton = new Button();
+            delButton.setIcon(new Icon(VaadinIcon.CLOSE));
+            delButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+            delButton.addClickListener(e -> editEventListener.accept(shoppingList));
+            buttons.add(delButton);
+            return buttons;
         })).setFlexGrow(0);
         shoppingListGrid.setItemDetailsRenderer(new ComponentRenderer<>(shoppingList -> {
             HorizontalLayout result = new HorizontalLayout();
