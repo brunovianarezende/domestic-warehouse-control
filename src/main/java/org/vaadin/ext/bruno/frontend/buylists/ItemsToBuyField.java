@@ -13,6 +13,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.dnd.GridDropMode;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
@@ -31,7 +32,18 @@ public class ItemsToBuyField extends AbstractCompositeField<FormLayout, ItemsToB
 
         Grid<ItemToBuy> itemsToBuyGrid = new Grid<>();
         itemsToBuyGrid.addColumn(i -> i.getItem().getName()).setHeader("Item");
-        itemsToBuyGrid.addColumn(ItemToBuy::getNumberOfItems).setHeader("Number of items to buy");
+        itemsToBuyGrid.addColumn(new ComponentRenderer<>(itemToBuy -> {
+            IntegerField numItems = new IntegerField();
+            numItems.setStep(1);
+            numItems.setHasControls(true);
+            numItems.setMin(1);
+            numItems.setValue(itemToBuy.getNumberOfItems());
+            numItems.addValueChangeListener(e -> {
+                int value = e.getValue() == null ? 0 : e.getValue();
+                itemToBuy.setNumberOfItems(value);
+            });
+            return numItems;
+        })).setHeader("Number of items to buy");
         itemsToBuyGrid.setItemDetailsRenderer(new ComponentRenderer<>(itemToBuy -> {
             HorizontalLayout result = new HorizontalLayout();
             Label label = new Label("Notes:");
@@ -100,8 +112,7 @@ public class ItemsToBuyField extends AbstractCompositeField<FormLayout, ItemsToB
             int weHave = theItem.getCurrentAmount();
             if (weShouldHave > weHave) {
                 return weShouldHave - weHave;
-            }
-            else {
+            } else {
                 return 1;
             }
         }
@@ -110,23 +121,21 @@ public class ItemsToBuyField extends AbstractCompositeField<FormLayout, ItemsToB
     }
 
     private String createShouldHaveColum(Item item) {
-         Integer warningThreshold = item.getWarningThreshold();
-         Integer maxAmount = item.getMaxAmount();
-         if (warningThreshold == null) {
-             return "-";
-         }
-         else if (maxAmount == null) {
-             return String.valueOf(warningThreshold + 1);
-         }
-         else {
-             return String.format("%s - %s", warningThreshold+1, maxAmount);
-         }
+        Integer warningThreshold = item.getWarningThreshold();
+        Integer maxAmount = item.getMaxAmount();
+        if (warningThreshold == null) {
+            return "-";
+        } else if (maxAmount == null) {
+            return String.valueOf(warningThreshold + 1);
+        } else {
+            return String.format("%s - %s", warningThreshold + 1, maxAmount);
+        }
     }
 
     @Override
     protected void setPresentationValue(Collection<ItemToBuy> itemsToBuy) {
         currentItems.clear();
-        for (ItemToBuy itemToBuy: itemsToBuy) {
+        for (ItemToBuy itemToBuy : itemsToBuy) {
             currentItems.put(itemToBuy.getItem().getId(), itemToBuy);
         }
     }
