@@ -7,6 +7,7 @@ import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
@@ -52,51 +53,73 @@ public class ShoppingListsView extends Composite<VerticalLayout> {
             // temp stub calls while I don't add proper paging support in service
             q.getLimit();
             q.getOffset();
-            return service.getShoppingLists().stream();
+            return service.getShoppingLists().stream().filter(sl -> !sl.isDone());
         },
-                q -> service.getCount());
+                q -> (int)service.getShoppingLists().stream().filter(sl -> !sl.isDone()).count());
 
-        Grid<ShoppingList> itemGrid = createGrid(shoppingList -> {
-            UI.getCurrent().navigate(EditShoppingListView.class, shoppingList.getId());
-        }, shoppingList -> {
-            Dialog dialog = new Dialog();
-            VerticalLayout layout = new VerticalLayout();
-            dialog.add(layout);
+        Grid<ShoppingList> itemGrid = createGrid(
+                shoppingList -> {
+                    service.markAsDone(shoppingList);
+                    provider.refreshAll();
+                },
+                shoppingList -> {
+                    UI.getCurrent().navigate(EditShoppingListView.class, shoppingList.getId());
+                },
+                shoppingList -> {
+                    Dialog dialog = new Dialog();
+                    VerticalLayout layout = new VerticalLayout();
+                    dialog.add(layout);
 
-            Label label = new Label(
-                    String.format(
-                            "Are you sure you want to delete the '%s' shopping list? It won't be possible to recover it.",
-                            shoppingList.getIdentifier()));
-            layout.add(label);
+                    Label label = new Label(
+                            String.format(
+                                    "Are you sure you want to delete the '%s' shopping list? It won't be possible to recover it.",
+                                    shoppingList.getIdentifier()));
+                    layout.add(label);
 
-            HorizontalLayout buttons = new HorizontalLayout();
-            layout.add(buttons);
+                    HorizontalLayout buttons = new HorizontalLayout();
+                    layout.add(buttons);
 
-            Button confirm = new Button("Confirm");
-            confirm.addClickListener(e -> {
-                service.deleteShoppingList(shoppingList);
-                provider.refreshAll();
-                Notification.show("List Deleted", 1000, Notification.Position.MIDDLE);
-                dialog.close();
-            });
-            buttons.add(confirm);
+                    Button confirm = new Button("Confirm");
+                    confirm.addClickListener(e -> {
+                        service.deleteShoppingList(shoppingList);
+                        provider.refreshAll();
+                        Notification.show("List Deleted", 1000, Notification.Position.MIDDLE);
+                        dialog.close();
+                    });
+                    buttons.add(confirm);
 
-            Button cancel = new Button("Cancel");
-            cancel.addClickListener(e -> dialog.close());
-            cancel.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-            buttons.add(cancel);
+                    Button cancel = new Button("Cancel");
+                    cancel.addClickListener(e -> dialog.close());
+                    cancel.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+                    buttons.add(cancel);
 
-            dialog.open();
-        });
+                    dialog.open();
+                });
         itemGrid.setDataProvider(provider);
         getContent().add(itemGrid);
     }
 
-    private Grid<ShoppingList> createGrid(Consumer<ShoppingList> editEventListener,
+    private Grid<ShoppingList> createGrid(
+            Consumer<ShoppingList> markAsDoneEventListener,
+            Consumer<ShoppingList> editEventListener,
             Consumer<ShoppingList> deleteEventListener) {
         Grid<ShoppingList> shoppingListGrid = new Grid<>();
         shoppingListGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
-        shoppingListGrid.addColumn(ShoppingList::getIdentifier).setHeader("Identifier");
+        shoppingListGrid.addColumn(new ComponentRenderer<>(shoppingList -> {
+            HorizontalLayout layout = new HorizontalLayout();
+
+            Checkbox markAsDoneCheckbox = new Checkbox();
+            Text identifierText = new Text(shoppingList.getIdentifier());
+
+            markAsDoneCheckbox.addValueChangeListener(e -> {
+                layout.getStyle().set("text-decoration", "line-through");
+                markAsDoneCheckbox.setReadOnly(true);
+                markAsDoneEventListener.accept(shoppingList);
+            });
+            layout.add(markAsDoneCheckbox);
+            layout.add(identifierText);
+            return layout;
+        })).setHeader("Identifier");
         shoppingListGrid.addColumn(new ComponentRenderer<>(shoppingList -> {
             FlexLayout buttons = new FlexLayout();
             Button editButton = new Button();

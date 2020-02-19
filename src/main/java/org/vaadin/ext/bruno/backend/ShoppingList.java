@@ -12,6 +12,8 @@ public class ShoppingList {
 
     private String notes = "";
 
+    boolean done;
+
     public String getId() {
         return id;
     }
@@ -42,5 +44,13 @@ public class ShoppingList {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public boolean isDone() {
+        return done;
+    }
+
+    public void setDone(boolean done) {
+        this.done = done;
     }
 }

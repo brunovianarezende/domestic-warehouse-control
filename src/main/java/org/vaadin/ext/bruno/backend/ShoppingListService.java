@@ -64,4 +64,10 @@ public class ShoppingListService {
             shoppingLists.remove(theIndex);
         }
     }
+
+    public void markAsDone(ShoppingList shoppingList) {
+        getShoppingList(shoppingList.getId()).ifPresent(s -> {
+            s.setDone(true);
+        });
+    }
 }
