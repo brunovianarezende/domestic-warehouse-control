@@ -51,4 +51,17 @@ public class ShoppingListService {
             shoppingLists.set(theIndex, shoppingList);
         }
     }
+
+    public void deleteShoppingList(ShoppingList shoppingList) {
+        int theIndex = -1;
+        for (int i = 0; i < shoppingLists.size(); i++) {
+            if (shoppingLists.get(i).getId().equals(shoppingList.getId())) {
+                theIndex = i;
+                break;
+            }
+        }
+        if (theIndex != -1) {
+            shoppingLists.remove(theIndex);
+        }
+    }
 }
