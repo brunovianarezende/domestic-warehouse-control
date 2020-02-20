@@ -11,7 +11,8 @@ import org.vaadin.ext.bruno.frontend.buylists.ShoppingListsView;
 import org.vaadin.ext.bruno.frontend.items.ItemsView;
 
 @PWA(name = "Domestic Warehouse Control", shortName = "DWC")
-@CssImport("./styles/shared-styles.css")
+@CssImport("styles/shared-styles.css")
+@CssImport(value = "styles/vaadin-grid-styles.css", themeFor = "vaadin-grid")
 public class MainLayout extends AppLayout {
     public MainLayout() {
         addToNavbar(new DrawerToggle());

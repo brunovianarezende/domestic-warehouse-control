@@ -72,6 +72,22 @@ public class ItemsToBuyField extends AbstractCompositeField<FormLayout, ItemsToB
         availableItemsGrid.setDataProvider(configurableAvailableItemsDP);
         availableItemsGrid.setRowsDraggable(true);
         availableItemsGrid.setWidth("100px");
+        availableItemsGrid.setClassNameGenerator(item -> {
+            if (item.getWarningThreshold() == null && item.getMustBuyThreshold() == null) {
+                return "";
+            }
+            if (item.getMustBuyThreshold() != null) {
+                if (item.getCurrentAmount() <= item.getMustBuyThreshold()) {
+                    return "must-buy";
+                }
+            }
+            if (item.getWarningThreshold() != null) {
+                if (item.getCurrentAmount() <= item.getWarningThreshold()) {
+                    return "should-buy";
+                }
+            }
+            return "";
+        });
         grids.add(availableItemsGrid);
 
         List<Item> draggedItems = new ArrayList<>();
