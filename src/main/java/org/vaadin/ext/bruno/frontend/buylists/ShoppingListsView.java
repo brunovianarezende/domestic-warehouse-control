@@ -21,6 +21,7 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
+import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.Route;
@@ -36,26 +37,43 @@ public class ShoppingListsView extends Composite<VerticalLayout> {
     public ShoppingListsView() {
         ShoppingListService service = ShoppingListService.getInstance();
 
+        DataProvider<ShoppingList, Boolean> provider = new CallbackDataProvider<>(
+                q -> {
+                    // temp stub calls while I don't add proper paging support in service
+                    q.getLimit();
+                    q.getOffset();
+                    boolean returnAllItems = q.getFilter().orElse(false);
+                    return service.getShoppingLists().stream().filter(sl -> returnAllItems || !sl.isDone());
+                },
+                q -> {
+                    boolean returnAllItems = q.getFilter().orElse(false);
+                    return (int) service.getShoppingLists().stream().filter(sl -> returnAllItems || !sl.isDone())
+                            .count();
+                });
+        ConfigurableFilterDataProvider<ShoppingList, Void, Boolean> filterDataProvider = provider
+                .withConfigurableFilter();
+
+
         HorizontalLayout gridHeader = new HorizontalLayout();
+        gridHeader.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.END);
+
         H3 title = new H3("Shopping lists");
         title.getStyle().set("margin-top", "0px");
         gridHeader.add(title);
-        Button addList = new Button("Add");
-        addList.addClickListener((e) -> {
-            UI.getCurrent().navigate(AddShoppingListView.class);
-        });
-        gridHeader.add(addList);
-        gridHeader.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.END);
-        getContent().add(gridHeader);
 
-        // when we have some filtering, use ConfigurableFilterDataProvider
-        DataProvider<ShoppingList, Void> provider = new CallbackDataProvider<>(q -> {
-            // temp stub calls while I don't add proper paging support in service
-            q.getLimit();
-            q.getOffset();
-            return service.getShoppingLists().stream().filter(sl -> !sl.isDone());
-        },
-                q -> (int)service.getShoppingLists().stream().filter(sl -> !sl.isDone()).count());
+        Button addList = new Button("Add");
+        addList.addClickListener((e) -> UI.getCurrent().navigate(AddShoppingListView.class));
+        gridHeader.add(addList);
+
+        Checkbox showFinishedLists = new Checkbox("Show finished lists");
+        showFinishedLists.setValue(false);
+        showFinishedLists.addValueChangeListener(e -> {
+            boolean showAllItems = Boolean.TRUE.equals(e.getValue());
+            filterDataProvider.setFilter(showAllItems);
+        });
+        gridHeader.add(showFinishedLists);
+
+        getContent().add(gridHeader);
 
         Grid<ShoppingList> itemGrid = createGrid(
                 shoppingList -> {
@@ -95,7 +113,7 @@ public class ShoppingListsView extends Composite<VerticalLayout> {
 
                     dialog.open();
                 });
-        itemGrid.setDataProvider(provider);
+        itemGrid.setDataProvider(filterDataProvider);
         getContent().add(itemGrid);
     }
 
